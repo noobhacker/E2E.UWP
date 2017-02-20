@@ -16,6 +16,7 @@ using Windows.Media.Capture;
 using Windows.Media.FaceAnalysis;
 using Windows.Media.MediaProperties;
 using Windows.Storage.Streams;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,6 +25,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 using Windows.Web.Http;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -148,28 +150,21 @@ namespace E2E.UWP
                     var result = await LookingDirectionHelper.GetLookingDirectionAsync(face.faceLandmarks);
                     sw.Stop();
                     Debug.WriteLine($"Analyze took {sw.ElapsedMilliseconds.ToString()}ms");
+                    
+                    foreach(var item in positionCanvas.Children.AsEnumerable())
+                    {
+                        positionCanvas.Children.Remove(item);
+                    }
 
-                    debugOutput.Text = result.XPercent + " " + result.YPercent + "\n" + 
-                        face.faceId;
+                    var dot = new Ellipse();
+                    dot.Fill = new SolidColorBrush(Colors.Green);
+                    dot.Height = 10;
+                    dot.Width = 10;
+                    dot.Margin = new Thickness(positionCanvas.ActualWidth * (result.XPercent > 0.5? result.XPercent * 1.2: result.XPercent/1.2),
+                        positionCanvas.ActualHeight * (result.YPercent > 0.5? result.YPercent * 1.3: result.YPercent/1.3), 0, 0);
+                    positionCanvas.Children.Add(dot);
 
-                    topGrid.Visibility = Visibility.Collapsed;
-                    leftGrid.Visibility = Visibility.Collapsed;
-                    middleGrid.Visibility = Visibility.Collapsed;
-                    rightGrid.Visibility = Visibility.Collapsed;
-                    bottomGrid.Visibility = Visibility.Collapsed;
-
-                    if (result.IsLookingTop)
-                        topGrid.Visibility = Visibility.Visible;
-                    if (result.IsLookingLeft)
-                        leftGrid.Visibility = Visibility.Visible;
-                    if (result.IsLookingCenter)
-                        middleGrid.Visibility = Visibility.Visible;
-                    if (result.IsLookingRight)
-                        rightGrid.Visibility = Visibility.Visible;
-                    if (result.IsLookingBottom)
-                        bottomGrid.Visibility = Visibility.Visible;
                 }
-                debugOutput.Text = debugOutput.Text + $"( {faces.Count()} faces)" ;
             }
         }
 

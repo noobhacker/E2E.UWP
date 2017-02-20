@@ -18,36 +18,36 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <CaptureElement Name="preview"
-                            Stretch="Uniform" />
+                            Stretch="Uniform"
+                            RenderTransformOrigin="0.5,0.5">
+                <CaptureElement.RenderTransform>
+                    <CompositeTransform ScaleX="-1" />
+                </CaptureElement.RenderTransform>
+            </CaptureElement>
             <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid Name="topGrid"
-                      Grid.Column="1"
-                      Background="Green" />
-                <Grid Name="leftGrid"
-                      Grid.Row="1"
-                      Background="Green" />
-                <Grid Name="middleGrid"
-                      Grid.Column="1"
-                      Grid.Row="1"
-                      Background="Green" />
-                <Grid Name="rightGrid"
-                      Grid.Column="2"
-                      Grid.Row="1"
-                      Background="Green" />
-                <Grid Name="bottomGrid"
-                      Grid.Column="1"
-                      Grid.Row="2"
-                      Background="Green" />
+                <Canvas Name="positionCanvas" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border BorderThickness="1"
+                            BorderBrush="Gray" />
+                    <Border BorderThickness="1"
+                            BorderBrush="Gray"
+                            Grid.Row="1" />
+                    <Border BorderThickness="1"
+                            BorderBrush="Gray"
+                            Grid.Column="1" />
+                    <Border BorderThickness="1"
+                            BorderBrush="Gray"
+                            Grid.Row="1"
+                            Grid.Column="1" />
+                </Grid>
             </Grid>
         </Grid>
     </Grid>
