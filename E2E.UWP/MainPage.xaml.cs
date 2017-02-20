@@ -15,6 +15,7 @@ using Windows.Graphics.Imaging;
 using Windows.Media.Capture;
 using Windows.Media.FaceAnalysis;
 using Windows.Media.MediaProperties;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -40,11 +41,11 @@ namespace E2E.UWP
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
-        {           
+        {
             base.OnNavigatedTo(e);
             StartCameraAsync();
         }
-       
+
         private async Task StartCameraAsync()
         {
             var mediaCapture = new MediaCapture();
@@ -52,23 +53,23 @@ namespace E2E.UWP
             var allVideoDevices = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
             var frontCamera = allVideoDevices.Where(x => x.EnclosureLocation.Panel == Windows.Devices.Enumeration.Panel.Front);
             var settings = new MediaCaptureInitializationSettings();
-            settings.VideoDeviceId = frontCamera.FirstOrDefault().Id;            
+            settings.VideoDeviceId = frontCamera.FirstOrDefault().Id;
             await mediaCapture.InitializeAsync(settings);
 
             // set lowest resolution
             var resolutions = mediaCapture.VideoDeviceController.GetAvailableMediaStreamProperties(MediaStreamType.Photo).Select(x => x as VideoEncodingProperties);
             var minRes = resolutions.OrderBy(x => x.Height * x.Width).FirstOrDefault();
             await mediaCapture.VideoDeviceController.SetMediaStreamPropertiesAsync(MediaStreamType.Photo, minRes);
-        
+
             preview.Source = mediaCapture;
             await mediaCapture.StartPreviewAsync();
-            while(true)
+            while (true)
             {
-                var lowLagCapture = await mediaCapture.PrepareLowLagPhotoCaptureAsync(ImageEncodingProperties.CreatePng());
+                //var lowLagCapture = await mediaCapture.PrepareLowLagPhotoCaptureAsync(ImageEncodingProperties.CreatePng());
 
-                var capturedPhoto = await lowLagCapture.CaptureAsync();
+                //var capturedPhoto = await lowLagCapture.CaptureAsync();
+                //await lowLagCapture.FinishAsync();
 
-                await lowLagCapture.FinishAsync();
                 //const BitmapPixelFormat faceDetectionPixelFormat = BitmapPixelFormat.Gray8;
 
                 //SoftwareBitmap convertedBitmap;
@@ -96,13 +97,13 @@ namespace E2E.UWP
                 //}
 
                 // preview image for send
-    //            if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
-    //softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
-    //            {
-    //                softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
-    //            }
-    //            var bitmapSource = new SoftwareBitmapSource();
-    //            await bitmapSource.SetBitmapAsync(softwareBitmap);
+                //            if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
+                //softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
+                //            {
+                //                softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
+                //            }
+                //            var bitmapSource = new SoftwareBitmapSource();
+                //            await bitmapSource.SetBitmapAsync(softwareBitmap);
                 //processPreview.Source = bitmapSource;
 
                 var sw = new Stopwatch();
@@ -110,17 +111,22 @@ namespace E2E.UWP
                 List<FaceObject> faces = null;
                 try
                 {
-
-                    //faces = await faceServiceClient.DetectAsync(processPreview.om, true, true, null);
-
-                    var HttpContent = new HttpStreamContent(capturedPhoto.Frame.AsStream().AsInputStream());
-                    HttpContent.Headers.ContentType = new Windows.Web.Http.Headers.HttpMediaTypeHeaderValue("application/octet-stream");
-                    var client = new HttpClient();
-                    var uri = new Uri($"https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=true");
-                    client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "a41afd4e07a24847a9b14eb7bb548f0c");
-                    var result = await client.PostAsync(uri, HttpContent);
-                    string jsonString = result.Content.ToString();
-                    faces = JsonConvert.DeserializeObject<List<FaceObject>>(jsonString);
+                    using (var capturedPhoto = new InMemoryRandomAccessStream())
+                    {
+                        await mediaCapture.CapturePhotoToStreamAsync(ImageEncodingProperties.CreatePng(), capturedPhoto);
+                        //faces = await faceServiceClient.DetectAsync(processPreview.om, true, true, null);
+                        
+                        capturedPhoto.Seek(0);
+                        var HttpContent = new HttpStreamContent(capturedPhoto);
+                        await HttpContent.BufferAllAsync();
+                        HttpContent.Headers.ContentType = new Windows.Web.Http.Headers.HttpMediaTypeHeaderValue("application/octet-stream");
+                        var client = new HttpClient();
+                        var uri = new Uri($"https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=true");
+                        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "a41afd4e07a24847a9b14eb7bb548f0c");
+                        var result = await client.PostAsync(uri, HttpContent);
+                        string jsonString = result.Content.ToString();
+                        faces = JsonConvert.DeserializeObject<List<FaceObject>>(jsonString);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -137,15 +143,17 @@ namespace E2E.UWP
                 else
                 {
                     var face = faces[0];
-                 
+
                     sw.Start();
                     var result = await LookingDirectionHelper.GetLookingDirectionAsync(face.faceLandmarks);
                     sw.Stop();
                     Debug.WriteLine($"Analyze took {sw.ElapsedMilliseconds.ToString()}ms");
+
+                    debugOutput.Text = result.XPercent + " " + result.YPercent;
                 }
-                
+                debugOutput.Text = debugOutput.Text + $"( {faces.Count()} faces)";
             }
         }
-        
+
     }
 }

@@ -12,6 +12,7 @@
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <TextBlock Name="debugOutput" />
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
