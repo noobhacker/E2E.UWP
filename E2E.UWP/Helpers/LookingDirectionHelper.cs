@@ -38,10 +38,13 @@ namespace E2E.UWP.Helpers
             // generate direction
             var direction = new LookingDirectionObject();
 
+            // mirror direction!
             if (xPercent < STARTINGACCURACY)
-                direction.IsLookingLeft = true;
-            else if (xPercent > ACCURACY)
+                //direction.IsLookingLeft = true;
                 direction.IsLookingRight = true;
+            else if (xPercent > ACCURACY)
+                //direction.IsLookingRight = true;
+                direction.IsLookingLeft = true;
             else if (yPercent < STARTINGACCURACY)
                 direction.IsLookingTop = true;
             else if (yPercent > ACCURACY)
