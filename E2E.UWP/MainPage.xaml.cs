@@ -1,5 +1,6 @@
 ﻿using E2E.UWP.Helpers;
 using Microsoft.ProjectOxford.Face;
+using Microsoft.ProjectOxford.Face.Contract;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -58,37 +59,46 @@ namespace E2E.UWP
             var minRes = resolutions.OrderBy(x => x.Height * x.Width).FirstOrDefault();
             await mediaCapture.VideoDeviceController.SetMediaStreamPropertiesAsync(MediaStreamType.Photo, minRes);
         
-            // preview.Source = mediaCapture;
-            //await mediaCapture.StartPreviewAsync();
+            preview.Source = mediaCapture;
+            await mediaCapture.StartPreviewAsync();
             while(true)
             {
                 var lowLagCapture = await mediaCapture.PrepareLowLagPhotoCaptureAsync(ImageEncodingProperties.CreateUncompressed(MediaPixelFormat.Bgra8));
-                
+
                 var capturedPhoto = await lowLagCapture.CaptureAsync();
 
                 await lowLagCapture.FinishAsync();
 
-    //            var softwareBitmap = capturedPhoto.Frame.SoftwareBitmap;
-    //            if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
-    //softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
-    //            {
-    //                softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
-    //            }
-    //            var bitmapSource = new SoftwareBitmapSource();
-    //            await bitmapSource.SetBitmapAsync(softwareBitmap);
-    //            preview.Source = bitmapSource;
+                //            var softwareBitmap = capturedPhoto.Frame.SoftwareBitmap;
+                //            if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
+                //softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
+                //            {
+                //                softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
+                //            }
+                //            var bitmapSource = new SoftwareBitmapSource();
+                //            await bitmapSource.SetBitmapAsync(softwareBitmap);
+                //            preview.Source = bitmapSource;
 
                 var sw = new Stopwatch();
                 sw.Start();
-                var faces = await faceServiceClient.DetectAsync(capturedPhoto.Frame.AsStream());
+                Face[] faces = null;
+                try
+                {
+                    
+                    faces = await faceServiceClient.DetectAsync(capturedPhoto.Frame.AsStream());
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
                 sw.Stop();
                 Debug.Write($"cloud analyze took {sw.ElapsedMilliseconds.ToString()}ms");
                 sw.Reset();
 
                 if (faces.Count() == 0)
-                    Debug.Write("no face");
+                    Debug.WriteLine("no face");
                 else if (faces.Count() > 1)
-                    Debug.Write("many face");
+                    Debug.WriteLine("many face");
                 else
                 {
                     var face = faces[0];
@@ -96,7 +106,7 @@ namespace E2E.UWP
                     sw.Start();
                     var result = await LookingDirectionHelper.GetLookingDirectionAsync(face.FaceLandmarks);
                     sw.Stop();
-                    Debug.Write($"Analyze took {sw.ElapsedMilliseconds.ToString()}ms");
+                    Debug.WriteLine($"Analyze took {sw.ElapsedMilliseconds.ToString()}ms");
                 }
                 
                 await Task.Delay(1000);
