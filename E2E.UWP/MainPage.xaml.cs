@@ -56,6 +56,9 @@ namespace E2E.UWP
             var frontCamera = allVideoDevices.Where(x => x.EnclosureLocation.Panel == Windows.Devices.Enumeration.Panel.Front);
             var settings = new MediaCaptureInitializationSettings();
             settings.VideoDeviceId = frontCamera.FirstOrDefault().Id;
+
+            //mediaCapture.VideoDeviceController.Brightness += 20;
+
             await mediaCapture.InitializeAsync(settings);
 
             // set lowest resolution
@@ -65,67 +68,28 @@ namespace E2E.UWP
 
             preview.Source = mediaCapture;
             await mediaCapture.StartPreviewAsync();
+
+            var sw = new Stopwatch();
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "a41afd4e07a24847a9b14eb7bb548f0c");
+            var uri = new Uri($"https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=true");
+
             while (true)
             {
-                //var lowLagCapture = await mediaCapture.PrepareLowLagPhotoCaptureAsync(ImageEncodingProperties.CreatePng());
 
-                //var capturedPhoto = await lowLagCapture.CaptureAsync();
-                //await lowLagCapture.FinishAsync();
-
-                //const BitmapPixelFormat faceDetectionPixelFormat = BitmapPixelFormat.Gray8;
-
-                //SoftwareBitmap convertedBitmap;
-                //var sourceBitmap = capturedPhoto.Frame.SoftwareBitmap;
-                //if (sourceBitmap.BitmapPixelFormat != faceDetectionPixelFormat)
-                //{
-                //    convertedBitmap = SoftwareBitmap.Convert(sourceBitmap, faceDetectionPixelFormat);
-                //}
-                //else
-                //{
-                //    convertedBitmap = sourceBitmap;
-                //}
-                //// crop the face out
-                //var softwareBitmap = convertedBitmap;
-                //var faceDetector = await FaceDetector.CreateAsync();
-                //var detectedFace = await faceDetector.DetectFacesAsync(softwareBitmap);
-                //if (detectedFace.Count() == 0)
-                //    Debug.WriteLine("no face");
-                //else if (detectedFace.Count() > 1)
-                //    Debug.WriteLine("many face");
-                //else
-                //{
-                //    Debug.WriteLine("crop");
-
-                //}
-
-                // preview image for send
-                //            if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
-                //softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
-                //            {
-                //                softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
-                //            }
-                //            var bitmapSource = new SoftwareBitmapSource();
-                //            await bitmapSource.SetBitmapAsync(softwareBitmap);
-                //processPreview.Source = bitmapSource;
-
-                var sw = new Stopwatch();
+                
                 sw.Start();
                 List<FaceObject> faces = null;
                 try
                 {
                     using (var capturedPhoto = new InMemoryRandomAccessStream())
                     {
-                        await mediaCapture.CapturePhotoToStreamAsync(ImageEncodingProperties.CreatePng(), capturedPhoto);
-                        //faces = await faceServiceClient.DetectAsync(processPreview.om, true, true, null);
-                        
+                        await mediaCapture.CapturePhotoToStreamAsync(ImageEncodingProperties.CreatePng(), capturedPhoto);                       
                         capturedPhoto.Seek(0);
-                        var HttpContent = new HttpStreamContent(capturedPhoto);
-                        await HttpContent.BufferAllAsync();
-                        HttpContent.Headers.ContentType = new Windows.Web.Http.Headers.HttpMediaTypeHeaderValue("application/octet-stream");
-                        var client = new HttpClient();
-                        var uri = new Uri($"https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=true");
-                        client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "a41afd4e07a24847a9b14eb7bb548f0c");
-                        var result = await client.PostAsync(uri, HttpContent);
+                        var httpContent = new HttpStreamContent(capturedPhoto);
+                        await httpContent.BufferAllAsync();
+                        httpContent.Headers.ContentType = new Windows.Web.Http.Headers.HttpMediaTypeHeaderValue("application/octet-stream");                       
+                        var result = await client.PostAsync(uri, httpContent);
                         string jsonString = result.Content.ToString();
                         faces = JsonConvert.DeserializeObject<List<FaceObject>>(jsonString);
                     }
@@ -134,6 +98,7 @@ namespace E2E.UWP
                 {
                     Debug.WriteLine(ex.Message);
                 }
+
                 sw.Stop();
                 Debug.WriteLine($"cloud analyze took {sw.ElapsedMilliseconds.ToString()}ms");
                 sw.Reset();
@@ -150,7 +115,9 @@ namespace E2E.UWP
                     var result = await LookingDirectionHelper.GetLookingDirectionAsync(face.faceLandmarks);
                     sw.Stop();
                     Debug.WriteLine($"Analyze took {sw.ElapsedMilliseconds.ToString()}ms");
-                    
+                    sw.Reset();
+
+                    // draw
                     foreach(var item in positionCanvas.Children.AsEnumerable())
                     {
                         positionCanvas.Children.Remove(item);
