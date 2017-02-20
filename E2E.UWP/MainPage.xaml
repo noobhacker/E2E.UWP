@@ -8,6 +8,17 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <CaptureElement Name="preview" Stretch="Uniform"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"  />
+            </Grid.RowDefinitions>
+            <CaptureElement Name="preview" Stretch="Uniform"/>
+            <Image Name="processPreview" Stretch="Uniform" Grid.Row="1" />
+        </Grid>
     </Grid>
 </Page>

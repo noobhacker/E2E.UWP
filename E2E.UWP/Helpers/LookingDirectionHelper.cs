@@ -1,5 +1,5 @@
-﻿using E2E.UWP.Objects;
-using Microsoft.ProjectOxford.Face.Contract;
+﻿using E2E.UWP.DTOs.FaceDto;
+using E2E.UWP.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +13,11 @@ namespace E2E.UWP.Helpers
         const double ACCURACY = 0.8;
         const double STARTINGACCURACY = 1 - ACCURACY;
 
-        public static LookingDirectionObject GetLookingDirection(FaceLandmarks faceLandmarks)
+        public static LookingDirectionObject GetLookingDirection(Facelandmarks faceLandmarks)
         {
-            var leftXMinPos = faceLandmarks.EyeLeftOuter.X;
-            var leftXMaxPos = faceLandmarks.EyeLeftInner.X;
-            var leftXPos = faceLandmarks.PupilLeft.X;
+            var leftXMinPos = faceLandmarks.eyeLeftOuter.x;
+            var leftXMaxPos = faceLandmarks.eyeLeftInner.x;
+            var leftXPos = faceLandmarks.pupilLeft.x;
 
             double leftXMaxValue = leftXMaxPos - leftXMinPos;
             double leftXValue = leftXPos - leftXMinPos;
@@ -25,9 +25,9 @@ namespace E2E.UWP.Helpers
             double xPercent = leftXValue / leftXMaxValue;
 
             // left Y
-            var leftYMinPos = faceLandmarks.EyeLeftTop.Y;
-            var leftYMaxPos = faceLandmarks.EyeLeftBottom.Y;
-            var leftYPos = faceLandmarks.PupilLeft.Y;
+            var leftYMinPos = faceLandmarks.eyeLeftTop.y;
+            var leftYMaxPos = faceLandmarks.eyeLeftBottom.y;
+            var leftYPos = faceLandmarks.pupilLeft.y;
 
             double leftYMaxValue = leftYMaxPos - leftYMinPos;
             double leftYValue = leftYPos - leftYMinPos;
@@ -58,7 +58,7 @@ namespace E2E.UWP.Helpers
             return direction;
         }
 
-        public static async Task<LookingDirectionObject> GetLookingDirectionAsync(FaceLandmarks faceLandmarks)
+        public static async Task<LookingDirectionObject> GetLookingDirectionAsync(Facelandmarks faceLandmarks)
             => await Task.Run(() => GetLookingDirection(faceLandmarks));
 
 
