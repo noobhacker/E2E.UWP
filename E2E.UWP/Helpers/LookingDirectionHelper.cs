@@ -11,7 +11,7 @@ namespace E2E.UWP.Helpers
     public static class LookingDirectionHelper
     {
         // accuracy should not less than 0.5
-        const double ACCURACY = 0.55;
+        const double ACCURACY = 0.65;
         const double STARTINGACCURACY = 1 - ACCURACY;
 
         public static LookingDirectionObject GetLookingDirection(Facelandmarks faceLandmarks)
@@ -45,9 +45,9 @@ namespace E2E.UWP.Helpers
             else if (xPercent > ACCURACY)
                 //direction.IsLookingRight = true;
                 direction.IsLookingLeft = true;
-            else if (yPercent < STARTINGACCURACY)
+            else if (yPercent < (STARTINGACCURACY - 0.1)) //0.1 for calibration, maybe all of the values need calibrate
                 direction.IsLookingTop = true;
-            else if (yPercent > ACCURACY)
+            else if (yPercent > (ACCURACY - 0.1))
                 direction.IsLookingBottom = true;
 
             if (!direction.IsLookingLeft &&

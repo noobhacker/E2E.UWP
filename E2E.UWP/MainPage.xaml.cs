@@ -149,7 +149,8 @@ namespace E2E.UWP
                     sw.Stop();
                     Debug.WriteLine($"Analyze took {sw.ElapsedMilliseconds.ToString()}ms");
 
-                    debugOutput.Text += result.XPercent + " " + result.YPercent;
+                    debugOutput.Text = result.XPercent + " " + result.YPercent + "\n" + 
+                        face.faceId;
 
                     topGrid.Visibility = Visibility.Collapsed;
                     leftGrid.Visibility = Visibility.Collapsed;
@@ -168,7 +169,7 @@ namespace E2E.UWP
                     if (result.IsLookingBottom)
                         bottomGrid.Visibility = Visibility.Visible;
                 }
-                debugOutput.Text = debugOutput.Text + $"( {faces.Count()} faces)" + "\n";
+                debugOutput.Text = debugOutput.Text + $"( {faces.Count()} faces)" ;
             }
         }
 
