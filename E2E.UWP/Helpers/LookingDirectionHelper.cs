@@ -10,7 +10,8 @@ namespace E2E.UWP.Helpers
 {
     public static class LookingDirectionHelper
     {
-        const double ACCURACY = 0.6;
+        // accuracy should not less than 0.5
+        const double ACCURACY = 0.55;
         const double STARTINGACCURACY = 1 - ACCURACY;
 
         public static LookingDirectionObject GetLookingDirection(Facelandmarks faceLandmarks)

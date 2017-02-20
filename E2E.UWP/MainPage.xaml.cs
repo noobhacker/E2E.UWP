@@ -149,9 +149,26 @@ namespace E2E.UWP
                     sw.Stop();
                     Debug.WriteLine($"Analyze took {sw.ElapsedMilliseconds.ToString()}ms");
 
-                    debugOutput.Text = result.XPercent + " " + result.YPercent;
+                    debugOutput.Text += result.XPercent + " " + result.YPercent;
+
+                    topGrid.Visibility = Visibility.Collapsed;
+                    leftGrid.Visibility = Visibility.Collapsed;
+                    middleGrid.Visibility = Visibility.Collapsed;
+                    rightGrid.Visibility = Visibility.Collapsed;
+                    bottomGrid.Visibility = Visibility.Collapsed;
+
+                    if (result.IsLookingTop)
+                        topGrid.Visibility = Visibility.Visible;
+                    if (result.IsLookingLeft)
+                        leftGrid.Visibility = Visibility.Visible;
+                    if (result.IsLookingCenter)
+                        middleGrid.Visibility = Visibility.Visible;
+                    if (result.IsLookingRight)
+                        rightGrid.Visibility = Visibility.Visible;
+                    if (result.IsLookingBottom)
+                        bottomGrid.Visibility = Visibility.Visible;
                 }
-                debugOutput.Text = debugOutput.Text + $"( {faces.Count()} faces)";
+                debugOutput.Text = debugOutput.Text + $"( {faces.Count()} faces)" + "\n";
             }
         }
 
