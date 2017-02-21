@@ -21,6 +21,7 @@ using Windows.Media.Capture;
 using Windows.Media.FaceAnalysis;
 using Windows.Media.MediaProperties;
 using Windows.Storage.Streams;
+using Windows.System.Display;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -55,7 +56,14 @@ namespace E2E.UWP
             await InitializeServiceAsync();
         }
 
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            // displayrequest.requestrelease
+            // mediacapture.dispose
+        }
+
         MediaCapture mediaCapture = new MediaCapture();
+        DisplayRequest displayRequest = new DisplayRequest();
         private async Task InitializeServiceAsync()
         {
             await mediaCapture.SetFrontCameraAsync();
@@ -64,6 +72,7 @@ namespace E2E.UWP
             preview.Source = mediaCapture;
             await mediaCapture.StartPreviewAsync();
 
+            displayRequest.RequestActive();
             await StartServiceAsync();
         }
 
@@ -74,37 +83,44 @@ namespace E2E.UWP
             while (true)
             {
                 List<FaceObject> faces = null;
-                try
+                using (var imageStream = new InMemoryRandomAccessStream())
                 {
-                    using (var imageStream = new InMemoryRandomAccessStream())
+                    try
                     {
                         await mediaCapture.CapturePhotoToStreamAsync(ImageEncodingProperties.CreatePng(), imageStream);
                         faces = await FaceWebService.AnalyzeImageAsync(imageStream);
                     }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                    continue;
+                    catch(UnauthorizedAccessException)
+                    {
+                        vm.CameraStatus = "Camera permission denied";
+                        await Task.Delay(5000);
+                        continue;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                        continue;
+                    }
                 }
 
                 vm.CameraStatus = CameraMessageHelper.GetCameraMessage(faces);
 
+                // something wrong during post
                 if (faces == null)
                     continue;
 
                 if (faces.Count() == 1)
                 {
-                
                     var face = faces.FirstOrDefault();
-
                     var result = await LookingDirectionAlgorithm.GetLookingDirectionAsync(face.faceLandmarks);
 
-                    if (positionCanvas.Children.Count() > 10)
-                        positionCanvas.RemoveDots();
+                    //if (positionCanvas.Children.Count() > 10)
+                    //    positionCanvas.RemoveDots();
                     positionCanvas.DrawDotByPercent(result.XPercent, result.YPercent);
-
+                    vm.XPercent = result.XPercent;
+                    vm.YPercent = result.YPercent;
                 }
+
                 // write ms
                 vm.Ms = Convert.ToInt32(sw.ElapsedMilliseconds);
                 sw.Reset();

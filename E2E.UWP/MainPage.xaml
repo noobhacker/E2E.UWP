@@ -11,7 +11,13 @@
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Name="debugOutput" />
+        <TextBlock HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="8"
+                   Foreground="Green">
+            <Run Text="id: " />
+            <Run Text="{Binding UserId}" />
+        </TextBlock>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -19,7 +25,8 @@
             </Grid.RowDefinitions>
             <Grid>
                 <CaptureElement Name="preview"
-                                Stretch="Uniform">
+                                Stretch="Uniform"
+                                RenderTransformOrigin="0.5,0.5">
                     <CaptureElement.RenderTransform>
                         <CompositeTransform ScaleX="-1" />
                     </CaptureElement.RenderTransform>
@@ -61,6 +68,16 @@
                            Margin="8">
                     <Run Text="{Binding Ms}" />
                     <Run Text=" ms" />
+                </TextBlock>
+                <TextBlock Foreground="SkyBlue"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           Margin="8">
+                    <Run Text="X: " />
+                    <Run Text="{Binding XPercent}" />
+                    <LineBreak />
+                    <Run Text="Y: " />
+                    <Run Text="{Binding YPercent}" />
                 </TextBlock>
             </Grid>
         </Grid>

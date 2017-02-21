@@ -34,12 +34,16 @@ namespace E2E.UWP.Extensions.DotOnCanvasExtension
                 amplifiedXPercent = xPercent * 1.25;
             else if (xPercent < 0.4)
                 amplifiedXPercent = xPercent / 1.25;
+            else
+                amplifiedXPercent = xPercent;
 
             double amplifiedYPercent = 0;
             if (yPercent > 0.6)
-                amplifiedYPercent = xPercent * 1.2;
+                amplifiedYPercent = yPercent * 1.25;
             else if (yPercent < 0.4)
-                amplifiedYPercent = xPercent / 1.2;
+                amplifiedYPercent = yPercent / 1.25;
+            else
+                amplifiedYPercent = yPercent;
 
             double xOutput = width * amplifiedXPercent;
             double yOutput = height * amplifiedYPercent;
