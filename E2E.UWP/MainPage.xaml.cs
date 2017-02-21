@@ -85,37 +85,31 @@ namespace E2E.UWP
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.Message);
+                    continue;
                 }
 
+                vm.CameraStatus = CameraMessageHelper.GetCameraMessage(faces);
+
                 if (faces == null)
-                {
-                    // failure
                     continue;
-                }              
-                else if (faces.Count() == 0)
+
+                if (faces.Count() == 1)
                 {
-                    Debug.WriteLine("no face");
-                }
-                else if (faces.Count() > 1)
-                {
-                    Debug.WriteLine("many face");
-                }
-                else
-                {
+                
                     var face = faces.FirstOrDefault();
 
                     var result = await LookingDirectionHelper.GetLookingDirectionAsync(face.faceLandmarks);
 
+                    if (positionCanvas.Children.Count() > 10)
+                        positionCanvas.RemoveDots();
                     positionCanvas.DrawDotByPercent(result.XPercent, result.YPercent);
 
                 }
-
                 // write ms
                 vm.Ms = Convert.ToInt32(sw.ElapsedMilliseconds);
                 sw.Reset();
-
             }
         }
-      
+
     }
 }

@@ -98,6 +98,7 @@
     <Compile Include="DTOs\FaceDto.cs" />
     <Compile Include="Extensions\CameraExtension.cs" />
     <Compile Include="Extensions\DotOnCanvasExtension.cs" />
+    <Compile Include="Helpers\CameraMessageHelper.cs" />
     <Compile Include="Helpers\LookingDirectionHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

@@ -17,16 +17,25 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <CaptureElement Name="preview"
-                            Stretch="Uniform"
-                            RenderTransformOrigin="0.5,0.5">
-                <CaptureElement.RenderTransform>
-                    <CompositeTransform ScaleX="-1" />
-                </CaptureElement.RenderTransform>
-            </CaptureElement>
+            <Grid>
+                <CaptureElement Name="preview"
+                                Stretch="Uniform">
+                    <CaptureElement.RenderTransform>
+                        <CompositeTransform ScaleX="-1" />
+                    </CaptureElement.RenderTransform>
+                </CaptureElement>
+
+                <TextBlock Text="{Binding CameraStatus}"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Top"
+                           Margin="8"
+                           Foreground="Green" />
+            </Grid>
+            
             <Grid Grid.Row="1">
                 <Canvas Name="positionCanvas" />
-                <Rectangle StrokeThickness="1" Stroke="Gray" />
+                <Rectangle StrokeThickness="1"
+                           Stroke="Gray" />
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -46,7 +55,10 @@
                           Grid.RowSpan="3" />
                 </Grid>
 
-                <TextBlock Foreground="Green" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8">
+                <TextBlock Foreground="Green"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"
+                           Margin="8">
                     <Run Text="{Binding Ms}" />
                     <Run Text=" ms" />
                 </TextBlock>

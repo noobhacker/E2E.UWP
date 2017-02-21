@@ -13,7 +13,7 @@ namespace E2E.UWP.Extensions.DotOnCanvasExtension
 {
     public static class DotOnCanvasExtension
     {
-        public static void ClearDots(this Canvas canvas)
+        public static void RemoveDots(this Canvas canvas)
         {
             foreach (var item in canvas.Children.AsEnumerable())
             {
