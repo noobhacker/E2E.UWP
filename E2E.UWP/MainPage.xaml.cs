@@ -79,9 +79,10 @@ namespace E2E.UWP
         private async Task StartServiceAsync()
         {
             var sw = new Stopwatch();
-            sw.Start();
+            
             while (true)
             {
+                sw.Start();
                 List<FaceObject> faces = null;
                 using (var imageStream = new InMemoryRandomAccessStream())
                 {
@@ -115,12 +116,14 @@ namespace E2E.UWP
                     var result = await LookingDirectionAlgorithm.GetLookingDirectionAsync(face.faceLandmarks);
 
                     //if (positionCanvas.Children.Count() > 10)
-                    //    positionCanvas.RemoveDots();
+                        positionCanvas.RemoveDots();
                     positionCanvas.DrawDotByPercent(result.XPercent, result.YPercent);
                     vm.XPercent = result.XPercent;
                     vm.YPercent = result.YPercent;
-                }
 
+                    vm.UserId = face.faceId;
+                }
+                
                 // write ms
                 vm.Ms = Convert.ToInt32(sw.ElapsedMilliseconds);
                 sw.Reset();
