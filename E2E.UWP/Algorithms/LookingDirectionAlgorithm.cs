@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace E2E.UWP.Helpers
 {
-    public static class LookingDirectionHelper
+    public static class LookingDirectionAlgorithm
     {
         // accuracy should not less than 0.5
         const double ACCURACY = 0.65;

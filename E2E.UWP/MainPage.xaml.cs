@@ -98,7 +98,7 @@ namespace E2E.UWP
                 
                     var face = faces.FirstOrDefault();
 
-                    var result = await LookingDirectionHelper.GetLookingDirectionAsync(face.faceLandmarks);
+                    var result = await LookingDirectionAlgorithm.GetLookingDirectionAsync(face.faceLandmarks);
 
                     if (positionCanvas.Children.Count() > 10)
                         positionCanvas.RemoveDots();

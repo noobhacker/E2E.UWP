@@ -99,7 +99,7 @@
     <Compile Include="Extensions\CameraExtension.cs" />
     <Compile Include="Extensions\DotOnCanvasExtension.cs" />
     <Compile Include="Helpers\CameraMessageHelper.cs" />
-    <Compile Include="Helpers\LookingDirectionHelper.cs" />
+    <Compile Include="Algorithms\LookingDirectionAlgorithm.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
