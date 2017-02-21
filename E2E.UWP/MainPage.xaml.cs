@@ -84,11 +84,12 @@ namespace E2E.UWP
             {
                 sw.Start();
                 List<FaceObject> faces = null;
+                var properties = GetCompressedProperties();
                 using (var imageStream = new InMemoryRandomAccessStream())
                 {
                     try
-                    {
-                        await mediaCapture.CapturePhotoToStreamAsync(ImageEncodingProperties.CreatePng(), imageStream);
+                    {                        
+                        await mediaCapture.CapturePhotoToStreamAsync(properties, imageStream);
                         faces = await FaceWebService.AnalyzeImageAsync(imageStream);
                     }
                     catch(UnauthorizedAccessException)
@@ -128,6 +129,15 @@ namespace E2E.UWP
                 vm.Ms = Convert.ToInt32(sw.ElapsedMilliseconds);
                 sw.Reset();
             }
+        }
+
+        private ImageEncodingProperties GetCompressedProperties()
+        {
+            var encodingQuality = ImageEncodingProperties.CreatePng();
+            //encodingQuality.Height = encodingQuality.Height / 2;
+            //encodingQuality.Width = encodingQuality.Width / 2;
+            //encodingQuality.Subtype = "GIF";
+            return encodingQuality;
         }
 
     }
