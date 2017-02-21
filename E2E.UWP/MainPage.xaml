@@ -26,28 +26,30 @@
             </CaptureElement>
             <Grid Grid.Row="1">
                 <Canvas Name="positionCanvas" />
+                <Rectangle StrokeThickness="1" Stroke="Gray" />
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="1" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="1" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Border BorderThickness="1"
-                            BorderBrush="Gray" />
-                    <Border BorderThickness="1"
-                            BorderBrush="Gray"
-                            Grid.Row="1" />
-                    <Border BorderThickness="1"
-                            BorderBrush="Gray"
-                            Grid.Column="1" />
-                    <Border BorderThickness="1"
-                            BorderBrush="Gray"
-                            Grid.Row="1"
-                            Grid.Column="1" />
+                    <Grid Background="Gray"
+                          Grid.Row="1"
+                          Grid.ColumnSpan="3" />
+                    <Grid Background="Gray"
+                          Grid.Column="1"
+                          Grid.RowSpan="3" />
                 </Grid>
+
+                <TextBlock Foreground="Green" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8">
+                    <Run Text="{Binding Ms}" />
+                    <Run Text=" ms" />
+                </TextBlock>
             </Grid>
         </Grid>
     </Grid>

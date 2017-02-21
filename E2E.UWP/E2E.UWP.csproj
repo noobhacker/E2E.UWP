@@ -96,12 +96,17 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="DTOs\FaceDto.cs" />
+    <Compile Include="Extensions\CameraExtension.cs" />
+    <Compile Include="Extensions\DotOnCanvasExtension.cs" />
     <Compile Include="Helpers\LookingDirectionHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Objects\LookingDirectionObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="WebServices\FaceWebService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -129,6 +134,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
