@@ -3,6 +3,7 @@ using E2E.UWP.Extensions;
 using E2E.UWP.Extensions.CameraExtension;
 using E2E.UWP.Extensions.DotOnCanvasExtension;
 using E2E.UWP.Helpers;
+using E2E.UWP.Objects;
 using E2E.UWP.ViewModels;
 using E2E.UWP.WebServices;
 using Newtonsoft.Json;
@@ -114,21 +115,33 @@ namespace E2E.UWP
                 if (faces.Count() == 1)
                 {
                     var face = faces.FirstOrDefault();
-                    var result = await LookingDirectionAlgorithm.GetLookingDirectionAsync(face.faceLandmarks);
-
-                    //if (positionCanvas.Children.Count() > 10)
-                        positionCanvas.RemoveDots();
-                    positionCanvas.DrawDotByPercent(result.XPercent, result.YPercent);
-                    vm.XPercent = result.XPercent;
-                    vm.YPercent = result.YPercent;
-
                     vm.UserId = face.faceId;
+
+                    var result = await LookingDirectionAlgorithm.GetLookingDirectionAsync(face.faceLandmarks);
+                    ProcessResult(result);
                 }
                 
                 // write ms
                 vm.Ms = Convert.ToInt32(sw.ElapsedMilliseconds);
                 sw.Reset();
             }
+        }
+
+        private void ProcessResult(LookingDirectionObject result)
+        {
+            positionCanvas.RemoveDots();
+            positionCanvas.DrawDotByPercent(result.XPercent, result.YPercent);
+            vm.XPercent = result.XPercent;
+            vm.YPercent = result.YPercent;
+
+            if (result.IsLookingTop)
+                vm.TopCount += 1;
+            if (result.IsLookingLeft)
+                vm.LeftCount += 1;
+            if (result.IsLookingRight)
+                vm.RightCount += 1;
+            if (result.IsLookingBottom)
+                vm.BottomCount += 1;
         }
 
         private ImageEncodingProperties GetCompressedProperties()
@@ -140,5 +153,12 @@ namespace E2E.UWP
             return encodingQuality;
         }
 
+        private void ResetBtn_Click(object sender, RoutedEventArgs e)
+        {
+            vm.TopCount = 0;
+            vm.LeftCount = 0;
+            vm.RightCount = 0;
+            vm.BottomCount = 0;
+        }
     }
 }
