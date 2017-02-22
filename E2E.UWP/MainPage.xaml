@@ -121,6 +121,7 @@
                     <Run Text="{Binding YPercent}" />
                 </TextBlock>
             </Grid>
-        </Grid>        
+        </Grid>
+        <Frame Name="frame"  Grid.Column="1"/>
     </Grid>
 </Page>

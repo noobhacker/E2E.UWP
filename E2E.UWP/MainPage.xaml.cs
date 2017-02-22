@@ -4,6 +4,8 @@ using E2E.UWP.Extensions.CameraExtension;
 using E2E.UWP.Extensions.DotOnCanvasExtension;
 using E2E.UWP.Helpers;
 using E2E.UWP.Objects;
+using E2E.UWP.Pages;
+using E2E.UWP.Services;
 using E2E.UWP.ViewModels;
 using E2E.UWP.WebServices;
 using Newtonsoft.Json;
@@ -49,110 +51,34 @@ namespace E2E.UWP
         {
             this.InitializeComponent();
             this.DataContext = vm;
+            CameraService.DirectionProcessed += this.CameraService_DirectionProcessed;      
+        }
+
+        private void CameraService_DirectionProcessed(object sender, LookingDirectionObject e)
+        {
+            positionCanvas.RemoveDots();
+            positionCanvas.DrawDotByPercent(e.XPercent, e.YPercent);
+            vm.XPercent = e.XPercent;
+            vm.YPercent = e.YPercent;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            await InitializeServiceAsync();
+
+            await CameraService.InitializeServiceAsync();
+            preview.Source = CameraService.mediaCapture;
+            CameraService.StartServiceAsync();
+
+            frame.Navigate(typeof(KeyboardPage));
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             // displayrequest.requestrelease
             // mediacapture.dispose
-        }
+        }        
 
-        MediaCapture mediaCapture = new MediaCapture();
-        DisplayRequest displayRequest = new DisplayRequest();
-        private async Task InitializeServiceAsync()
-        {
-            await mediaCapture.SetFrontCameraAsync();
-            await mediaCapture.SetLowestResolutionAsync();
-
-            preview.Source = mediaCapture;
-            await mediaCapture.StartPreviewAsync();
-
-            displayRequest.RequestActive();
-            await StartServiceAsync();
-        }
-
-        private async Task StartServiceAsync()
-        {
-            var sw = new Stopwatch();
-            
-            while (true)
-            {
-                sw.Start();
-                List<FaceObject> faces = null;
-                var properties = GetCompressedProperties();
-                using (var imageStream = new InMemoryRandomAccessStream())
-                {
-                    try
-                    {                        
-                        await mediaCapture.CapturePhotoToStreamAsync(properties, imageStream);
-                        faces = await FaceWebService.AnalyzeImageAsync(imageStream);
-                    }
-                    catch(UnauthorizedAccessException)
-                    {
-                        vm.CameraStatus = "Camera permission denied";
-                        await Task.Delay(5000);
-                        continue;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.Message);
-                        continue;
-                    }
-                }
-
-                vm.CameraStatus = CameraMessageHelper.GetCameraMessage(faces);
-
-                // something wrong during post
-                if (faces == null)
-                    continue;
-
-                if (faces.Count() == 1)
-                {
-                    var face = faces.FirstOrDefault();
-                    vm.UserId = face.faceId;
-
-                    var result = await LookingDirectionAlgorithm.GetLookingDirectionAsync(face.faceLandmarks);
-                    ProcessResult(result);
-                }
-                
-                // write ms
-                vm.Ms = Convert.ToInt32(sw.ElapsedMilliseconds);
-                sw.Reset();
-            }
-        }
-
-        private void ProcessResult(LookingDirectionObject result)
-        {
-            positionCanvas.RemoveDots();
-            positionCanvas.DrawDotByPercent(result.XPercent, result.YPercent);
-            vm.XPercent = result.XPercent;
-            vm.YPercent = result.YPercent;
-
-            if (result.IsLookingTop)
-                vm.TopCount += 1;
-            if (result.IsLookingLeft)
-                vm.LeftCount += 1;
-            if (result.IsLookingRight)
-                vm.RightCount += 1;
-            if (result.IsLookingBottom)
-                vm.BottomCount += 1;
-        }
-
-        private ImageEncodingProperties GetCompressedProperties()
-        {
-            var encodingQuality = ImageEncodingProperties.CreatePng();
-            //encodingQuality.Height = encodingQuality.Height / 2;
-            //encodingQuality.Width = encodingQuality.Width / 2;
-            //encodingQuality.Subtype = "GIF";
-            return encodingQuality;
-        }
-
-       
+     
     }
 }

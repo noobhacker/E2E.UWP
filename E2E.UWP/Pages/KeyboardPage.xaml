@@ -1,0 +1,34 @@
+﻿<Page
+    x:Class="E2E.UWP.Pages.KeyboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:E2E.UWP.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBox PlaceholderText="Look left / right to choose, look top to select,look bottom to apply suggestion"
+                     Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            
+            <GridView Grid.Row="1" 
+                      ItemsSource="{Binding Selections}">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock FontSize="24" Text="{Binding}" />
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+
+            <TextBlock Text="{Binding AutoCompleteText}"
+                       HorizontalAlignment="Center"
+                       Grid.Row="2" />
+        </Grid>
+    </Grid>
+</Page>

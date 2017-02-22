@@ -1,4 +1,5 @@
-﻿using E2E.UWP.ViewModels;
+﻿using E2E.UWP.Services;
+using E2E.UWP.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,11 +24,24 @@ namespace E2E.UWP.Pages
     /// </summary>
     public sealed partial class NursingPage : Page
     {
-        MainViewModel vm = MainPage.vm;
+        NursingViewModel vm = new NursingViewModel();
         public NursingPage()
         {
             this.InitializeComponent();
             this.DataContext = vm;
+            CameraService.DirectionProcessed += MainPage_DirectionProcessed;
+        }
+
+        private void MainPage_DirectionProcessed(object sender, Objects.LookingDirectionObject e)
+        {
+            if (e.IsLookingTop)
+                vm.TopCount += 1;
+            if (e.IsLookingLeft)
+                vm.LeftCount += 1;
+            if (e.IsLookingRight)
+                vm.RightCount += 1;
+            if (e.IsLookingBottom)
+                vm.BottomCount += 1;
         }
 
         private void ResetBtn_Click(object sender, RoutedEventArgs e)

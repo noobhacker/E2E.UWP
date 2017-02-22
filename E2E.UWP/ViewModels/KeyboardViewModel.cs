@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace E2E.UWP.ViewModels
+{
+    public class KeyboardViewModel : BaseViewModel
+    {
+        public ObservableCollection<string> Selections { get; set; }
+      
+        private string inputText;
+        private string autoCompleteText;
+
+        public string InputText { get => inputText; set { inputText = value; OnPropertyChanged(); } }
+        public string AutoCompleteText { get => autoCompleteText; set { autoCompleteText = value; OnPropertyChanged(); } }
+
+        const string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        public KeyboardViewModel()
+        {
+            Selections = new ObservableCollection<string>();
+            Selections.Add("Back");
+            foreach (var item in alphabets)
+                Selections.Add(item.ToString());
+            Selections.Add("Send");
+        }
+
+    }
+}

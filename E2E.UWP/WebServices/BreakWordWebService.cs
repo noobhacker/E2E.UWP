@@ -1,5 +1,4 @@
-﻿using E2E.UWP.Extensions.HttpExtension;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
