@@ -32,6 +32,7 @@ namespace E2E.UWP.Services
             displayRequest.RequestActive();
         }
 
+        // infinity loop! dont await
         public static async void StartServiceAsync()
         {
             await mediaCapture.StartPreviewAsync();
