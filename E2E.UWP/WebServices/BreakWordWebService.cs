@@ -1,4 +1,5 @@
-﻿using System;
+﻿using E2E.UWP.Extensions.HttpExtension;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,20 +10,17 @@ namespace E2E.UWP.WebServices
 {
     public static class BreakWordWebService
     {
-        static HttpClient httpClient = new HttpClient();
-        static string endpoint =
-            $"https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceLandmarks=true");
-
+        static AzureHttpClient httpClient;
+        const string endpoint =
+            "https://westus.api.cognitive.microsoft.com/text/weblm/v1.0/breakIntoWords?model=query&text=";
+        const string key= "cb67154570fe4d3794f0530a17c03922";
         static BreakWordWebService()
         {
-            httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key",
-                "cb67154570fe4d3794f0530a17c03922");
+            httpClient = new AzureHttpClient(endpoint, key);
         }
 
-        public static async string SplitWordAsync(string input)
-        {
-
-        }
+        public static async Task<string> SplitWordAsync(string input)
+            => await httpClient.PostAsync<string>(input);
 
     }
 }
