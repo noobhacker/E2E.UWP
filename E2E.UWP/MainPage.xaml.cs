@@ -44,7 +44,7 @@ namespace E2E.UWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        MainViewModel vm = new MainViewModel();
+        public static MainViewModel vm = new MainViewModel();
         public MainPage()
         {
             this.InitializeComponent();
@@ -153,12 +153,6 @@ namespace E2E.UWP
             return encodingQuality;
         }
 
-        private void ResetBtn_Click(object sender, RoutedEventArgs e)
-        {
-            vm.TopCount = 0;
-            vm.LeftCount = 0;
-            vm.RightCount = 0;
-            vm.BottomCount = 0;
-        }
+       
     }
 }

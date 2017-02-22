@@ -14,7 +14,7 @@ namespace E2E.UWP.WebServices
     {
         static HttpClient httpClient = new HttpClient();
         static Uri endpoint =
-            new Uri($"https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=true");
+            new Uri($"https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceLandmarks=true");
 
         static FaceWebService()
         {
