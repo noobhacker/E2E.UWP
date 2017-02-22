@@ -122,6 +122,7 @@
     <Compile Include="WebServices\AzureHttpClient.cs" />
     <Compile Include="WebServices\BreakWordWebService.cs" />
     <Compile Include="WebServices\FaceWebService.cs" />
+    <Compile Include="WebServices\NextWordWebService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
