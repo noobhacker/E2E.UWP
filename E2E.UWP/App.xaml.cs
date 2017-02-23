@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.EntityFrameworkCore;
+using E2E.UWP.Models;
 
 namespace E2E.UWP
 {
@@ -30,6 +32,11 @@ namespace E2E.UWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            using (var db = new DatabaseContext())
+            {
+                db.Database.Migrate();
+            }
         }
 
         /// <summary>

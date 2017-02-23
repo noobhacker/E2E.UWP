@@ -98,6 +98,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dictionaries\EnglishDictionary.cs" />
     <Compile Include="DTOs\FaceDto.cs" />
     <Compile Include="Extensions\CameraExtension.cs" />
     <Compile Include="Extensions\DotOnCanvasExtension.cs" />
@@ -106,6 +107,13 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20170223070533_Initial.cs" />
+    <Compile Include="Migrations\20170223070533_Initial.designer.cs">
+      <DependentUpon>20170223070533_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\DatabaseContextModelSnapshot.cs" />
+    <Compile Include="Models\DatabaseContext.cs" />
+    <Compile Include="Models\KeyFrequency.cs" />
     <Compile Include="Objects\LookingDirectionObject.cs" />
     <Compile Include="Pages\KeyboardPage.xaml.cs">
       <DependentUpon>KeyboardPage.xaml</DependentUpon>

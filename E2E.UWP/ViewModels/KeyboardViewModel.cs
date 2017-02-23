@@ -13,9 +13,13 @@ namespace E2E.UWP.ViewModels
       
         private string inputText;
         private string autoCompleteText;
+        private int selectionIndex;
 
         public string InputText { get => inputText; set { inputText = value; OnPropertyChanged(); } }
         public string AutoCompleteText { get => autoCompleteText; set { autoCompleteText = value; OnPropertyChanged(); } }
+
+        public int SelectionIndex { get => selectionIndex; set { selectionIndex = value; OnPropertyChanged(); } }
+
 
         const string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         public KeyboardViewModel()

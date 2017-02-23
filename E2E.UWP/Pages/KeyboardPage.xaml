@@ -14,11 +14,14 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBox PlaceholderText="Look left / right to choose, look top to select,look bottom to apply suggestion"
-                     Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox PlaceholderText="Look left / right to choose&#10;look top to select&#10;look bottom to apply suggestion"
+                     Text="{Binding InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     BorderThickness="0"
+                     FontSize="24"/>
             
             <GridView Grid.Row="1" 
-                      ItemsSource="{Binding Selections}">
+                      ItemsSource="{Binding Selections}"
+                      SelectedIndex="{Binding SelectionIndex}">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <TextBlock FontSize="24" Text="{Binding}" />

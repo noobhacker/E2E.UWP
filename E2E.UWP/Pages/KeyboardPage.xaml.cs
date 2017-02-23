@@ -1,4 +1,5 @@
-﻿using E2E.UWP.ViewModels;
+﻿using E2E.UWP.Services;
+using E2E.UWP.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,29 @@ namespace E2E.UWP.Pages
         {
             this.InitializeComponent();
             this.DataContext = vm;
+            CameraService.DirectionProcessed += CameraService_DirectionProcessed;
+        }
+
+        string previousDirection = "Middle";
+        int repeat = 0;
+        private void CameraService_DirectionProcessed(object sender, Objects.LookingDirectionObject e)
+        {
+            if(e.IsLookingLeft)
+            {
+                CheckIsRepeat("Left");
+                if(vm.SelectionIndex != 0)
+                {
+
+                }
+            }
+        }
+
+        private void CheckIsRepeat(string direction)
+        {
+            if (previousDirection == direction)
+                repeat+=1;
+            else
+                repeat = 0;
         }
     }
 }
