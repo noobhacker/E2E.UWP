@@ -36,11 +36,6 @@ namespace E2E.UWP.Pages
             CameraService.DirectionProcessed += CameraService_DirectionProcessedAsync;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            KeyGridView.SelectedIndex = 1;
-        }
-
         DatabaseContext db = new DatabaseContext();
 
         string previousDirection = "Middle";

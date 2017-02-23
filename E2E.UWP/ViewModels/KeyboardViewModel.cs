@@ -21,7 +21,7 @@ namespace E2E.UWP.ViewModels
         public int SelectionIndex { get => selectionIndex; set { selectionIndex = value; OnPropertyChanged(); } }
 
 
-        const string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string alphabets = "abcdefghijklmnopqrstuvwxyz";
         public KeyboardViewModel()
         {
             Selections = new ObservableCollection<string>();
