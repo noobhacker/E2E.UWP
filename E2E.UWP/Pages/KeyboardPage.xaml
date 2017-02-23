@@ -23,7 +23,7 @@
                       SelectedIndex="{Binding SelectionIndex}">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsWrapGrid MaximumRowsOrColumns="99" />
+                        <ItemsWrapGrid Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
                 <GridView.ItemTemplate>
