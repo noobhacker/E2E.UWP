@@ -35,17 +35,17 @@ namespace E2E.UWP.Extensions.DotOnCanvasExtension
 
             double calibratedXPercent = 0;
             if (centerX > 0.5)
-                calibratedXPercent = xPercent + (centerX - 0.5);
+                calibratedXPercent = xPercent - (centerX - 0.5);
             else if (centerX < 0.5)
-                calibratedXPercent = xPercent - (0.5 - centerX);
+                calibratedXPercent = xPercent + (0.5 - centerX);
             else
                 calibratedXPercent = xPercent;
 
             double calibratedYPercent = 0;
             if (centerY > 0.5)
-                calibratedYPercent = yPercent + (centerY - 0.5);
+                calibratedYPercent = yPercent - (centerY - 0.5);
             else if (centerY < 0.5)
-                calibratedYPercent = yPercent - (0.5 - centerY);
+                calibratedYPercent = yPercent + (0.5 - centerY);
             else
                 calibratedYPercent = yPercent;
 

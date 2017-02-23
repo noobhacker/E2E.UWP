@@ -24,6 +24,9 @@ namespace E2E.UWP.WebServices
         {
             var result = await httpClient.PostAsync<BreakWordObject>(input);
 
+            if (result == null)
+                return "";
+
             if (result.candidates.Count() > 0)
                 return result.candidates[0].words;
             else

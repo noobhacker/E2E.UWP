@@ -56,7 +56,7 @@ namespace E2E.UWP.Pages
             if (e.IsLookingRight)
             {
                 CheckIsRepeat("Right");
-                if (vm.Selections.Count - vm.SelectionIndex > repeat)
+                if (vm.Selections.Count - 1 - vm.SelectionIndex >= repeat)
                     vm.SelectionIndex += repeat;
                 else
                     vm.SelectionIndex = vm.Selections.Count;
@@ -102,7 +102,7 @@ namespace E2E.UWP.Pages
                 }
             }
 
-            if (e.IsLookingBottom)
+            if (e.IsLookingBottom && !e.IsLookingRight && !e.IsLookingLeft)
             {
                 CheckIsRepeat("Bottom");
 
@@ -139,7 +139,6 @@ namespace E2E.UWP.Pages
 
         private async Task<string> GetLastWord()
         {
-
             var splittedSentence = await BreakWordWebService.SplitWordAsync(vm.InputText);
             var words = splittedSentence.Split(' ');
             return words[words.Count() - 1];

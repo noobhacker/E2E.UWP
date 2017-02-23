@@ -14,7 +14,7 @@ namespace E2E.UWP.Helpers
         public static double MiddleX = 0.5;
         public static double MiddleY = 0.5;
 
-        const double RANGE = 0.2;
+        const double RANGE = 0.15;
 
         public static LookingDirectionObject GetLookingDirection(Facelandmarks faceLandmarks)
         {

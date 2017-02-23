@@ -84,5 +84,10 @@ namespace E2E.UWP
             LookingDirectionAlgorithm.MiddleX = vm.XPercent;
             LookingDirectionAlgorithm.MiddleY = vm.YPercent;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            frame.Navigate(typeof(NursingPage));
+        }
     }
 }

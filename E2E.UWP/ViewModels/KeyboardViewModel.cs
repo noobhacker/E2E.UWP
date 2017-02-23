@@ -31,6 +31,8 @@ namespace E2E.UWP.ViewModels
             Selections.Add("Send");
 
             SelectionIndex = 1;
+            InputText = "";
+            AutoCompleteText = "";
         }
 
     }
