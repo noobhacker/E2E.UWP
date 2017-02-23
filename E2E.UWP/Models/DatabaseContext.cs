@@ -9,7 +9,8 @@ namespace E2E.UWP.Models
 {
     public class DatabaseContext : DbContext
     {
-        public DbSet<KeyFrequency> KeyFrequencies { get; set; }
+        public DbSet<WordFrequency> WordFrequencies { get; set; }
+        public DbSet<MessageFrequency> MessageFrequencies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

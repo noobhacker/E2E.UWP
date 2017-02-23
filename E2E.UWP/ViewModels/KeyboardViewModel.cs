@@ -29,6 +29,8 @@ namespace E2E.UWP.ViewModels
             foreach (var item in alphabets)
                 Selections.Add(item.ToString());
             Selections.Add("Send");
+
+            SelectionIndex = 1;
         }
 
     }

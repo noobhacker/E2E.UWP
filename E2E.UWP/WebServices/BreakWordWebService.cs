@@ -1,4 +1,5 @@
-﻿using System;
+﻿using E2E.UWP.DTOs.BreakWordDto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,10 @@ namespace E2E.UWP.WebServices
         }
 
         public static async Task<string> SplitWordAsync(string input)
-            => await httpClient.PostAsync<string>(input);
+        {
+            var result = await httpClient.PostAsync<BreakWordObject>(input);
+            return result.candidates[0].words;
+        }
 
     }
 }

@@ -99,6 +99,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dictionaries\EnglishDictionary.cs" />
+    <Compile Include="DTOs\BreakWordDto.cs" />
     <Compile Include="DTOs\FaceDto.cs" />
     <Compile Include="Extensions\CameraExtension.cs" />
     <Compile Include="Extensions\DotOnCanvasExtension.cs" />
@@ -113,7 +114,8 @@
     </Compile>
     <Compile Include="Migrations\DatabaseContextModelSnapshot.cs" />
     <Compile Include="Models\DatabaseContext.cs" />
-    <Compile Include="Models\KeyFrequency.cs" />
+    <Compile Include="Models\WordFrequency.cs" />
+    <Compile Include="Models\MessageFrequency.cs" />
     <Compile Include="Objects\LookingDirectionObject.cs" />
     <Compile Include="Pages\KeyboardPage.xaml.cs">
       <DependentUpon>KeyboardPage.xaml</DependentUpon>
