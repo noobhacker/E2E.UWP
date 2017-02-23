@@ -21,7 +21,8 @@
             <GridView Grid.Row="1"
                       Name="KeyGridView"
                       ItemsSource="{Binding Selections}"
-                      SelectedIndex="{Binding SelectionIndex}">
+                      SelectedIndex="{Binding SelectionIndex, UpdateSourceTrigger=PropertyChanged}"
+                      Height="60">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ItemsWrapGrid Orientation="Vertical" />
@@ -37,7 +38,8 @@
 
             <TextBlock Text="{Binding AutoCompleteText}"
                        HorizontalAlignment="Center"
-                       Grid.Row="2" />
+                       Grid.Row="2" 
+                       Margin="8"/>
         </Grid>
     </Grid>
 </Page>
