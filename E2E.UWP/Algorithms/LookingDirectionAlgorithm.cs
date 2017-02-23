@@ -11,9 +11,10 @@ namespace E2E.UWP.Helpers
 {
     public static class LookingDirectionAlgorithm
     {
-        // accuracy should not less than 0.5
-        const double ACCURACY = 0.6;
-        const double STARTINGACCURACY = 1 - ACCURACY;
+        public static double MiddleX = 0.5;
+        public static double MiddleY = 0.5;
+
+        const double RANGE = 0.2;
 
         public static LookingDirectionObject GetLookingDirection(Facelandmarks faceLandmarks)
         {
@@ -65,13 +66,13 @@ namespace E2E.UWP.Helpers
             // generate direction
             var direction = new LookingDirectionObject();
                      
-            if (xPercent < STARTINGACCURACY)
+            if (xPercent < (MiddleX - RANGE))
                 direction.IsLookingLeft = true;
-            else if (xPercent > ACCURACY)
+            else if (xPercent > (MiddleX + RANGE))
                 direction.IsLookingRight = true;
-            else if (yPercent < (STARTINGACCURACY)) 
+            else if (yPercent < (MiddleY - RANGE)) 
                 direction.IsLookingTop = true;
-            else if (yPercent > (ACCURACY))
+            else if (yPercent > (MiddleY + (RANGE - 0.1))) // hard to go very bottom
                 direction.IsLookingBottom = true;
 
             if (!direction.IsLookingLeft &&

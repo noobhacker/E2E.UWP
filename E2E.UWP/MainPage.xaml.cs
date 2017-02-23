@@ -77,8 +77,12 @@ namespace E2E.UWP
         {
             // displayrequest.requestrelease
             // mediacapture.dispose
-        }        
+        }
 
-     
+        private void calibrateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            LookingDirectionAlgorithm.MiddleX = vm.XPercent;
+            LookingDirectionAlgorithm.MiddleY = vm.YPercent;
+        }
     }
 }

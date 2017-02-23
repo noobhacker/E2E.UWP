@@ -1,4 +1,5 @@
-﻿using System;
+﻿using E2E.UWP.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,24 +30,27 @@ namespace E2E.UWP.Extensions.DotOnCanvasExtension
             var width = canvas.ActualWidth;
             var height = canvas.ActualHeight;
 
-            double amplifiedXPercent = 0;
-            if (xPercent > 0.6)
-                amplifiedXPercent = xPercent * 1.25;
-            else if (xPercent < 0.4)
-                amplifiedXPercent = xPercent / 1.25;
-            else
-                amplifiedXPercent = xPercent;
+            var centerX = LookingDirectionAlgorithm.MiddleX;
+            var centerY = LookingDirectionAlgorithm.MiddleY;
 
-            double amplifiedYPercent = 0;
-            if (yPercent > 0.6)
-                amplifiedYPercent = yPercent * 1.25;
-            else if (yPercent < 0.4)
-                amplifiedYPercent = yPercent / 1.25;
+            double calibratedXPercent = 0;
+            if (centerX > 0.5)
+                calibratedXPercent = xPercent + (centerX - 0.5);
+            else if (centerX < 0.5)
+                calibratedXPercent = xPercent - (0.5 - centerX);
             else
-                amplifiedYPercent = yPercent;
+                calibratedXPercent = xPercent;
 
-            double xOutput = width * amplifiedXPercent;
-            double yOutput = height * amplifiedYPercent;
+            double calibratedYPercent = 0;
+            if (centerY > 0.5)
+                calibratedYPercent = yPercent + (centerY - 0.5);
+            else if (centerY < 0.5)
+                calibratedYPercent = yPercent - (0.5 - centerY);
+            else
+                calibratedYPercent = yPercent;
+
+            double xOutput = width * calibratedXPercent;
+            double yOutput = height * calibratedYPercent;
 
             DrawDotByPosition(canvas, xOutput, yOutput);
         }
