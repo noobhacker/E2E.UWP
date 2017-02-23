@@ -73,6 +73,8 @@ namespace E2E.UWP.Services
                 {
                     var face = faces.FirstOrDefault();
                     var result = await LookingDirectionAlgorithm.GetLookingDirectionAsync(face.faceLandmarks);
+
+                    if(result != null)
                     DirectionProcessed(null, result);
                 }
 

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -35,6 +36,11 @@ namespace E2E.UWP.Pages
             CameraService.DirectionProcessed += CameraService_DirectionProcessedAsync;
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            KeyGridView.SelectedIndex = 1;
+        }
+
         DatabaseContext db = new DatabaseContext();
 
         string previousDirection = "Middle";
@@ -43,14 +49,10 @@ namespace E2E.UWP.Pages
         {
             var selection = vm.Selections[vm.SelectionIndex];
 
-            var splittedSentence = await BreakWordWebService.SplitWordAsync(vm.InputText);
-            var words = splittedSentence.Split(' ');
-            var lastword = words[words.Count()];
-
             if (e.IsLookingLeft)
             {
                 CheckIsRepeat("Left");
-                if (vm.SelectionIndex < repeat)
+                if (vm.SelectionIndex > repeat)
                     vm.SelectionIndex -= repeat;
                 else
                     vm.SelectionIndex = 0;
@@ -59,7 +61,7 @@ namespace E2E.UWP.Pages
             if (e.IsLookingRight)
             {
                 CheckIsRepeat("Right");
-                if (vm.SelectionIndex > repeat)
+                if (vm.Selections.Count - vm.SelectionIndex > repeat)
                     vm.SelectionIndex += repeat;
                 else
                     vm.SelectionIndex = vm.Selections.Count;
@@ -70,20 +72,24 @@ namespace E2E.UWP.Pages
                 CheckIsRepeat("Top");
 
                 if (selection == "Back")
-                    this.Frame.GoBack();
+                //this.Frame.GoBack();
+                { }
                 else if (selection == "Send")
                     Frame.Navigate(typeof(MainPage)); // next page! ask to auto correct and spacing
                 else
                 {
                     vm.InputText += selection;
 
-                    // generate auto suggestion
-                    var wordFromDb = db.WordFrequencies
-                        .FirstOrDefault(x => x.Word.StartsWith(lastword))
-                        .Word;
+                    // do this algorithm after adding text!
+                    var lastword = await GetLastWord();
 
-                    if(wordFromDb != null)
+                    // generate auto suggestion
+                    var query = db.WordFrequencies
+                        .FirstOrDefault(x => x.Word.StartsWith(lastword));
+
+                    if (query != null)
                     {
+                        var wordFromDb = query.Word;
                         vm.AutoCompleteText = wordFromDb;
                     }
                     else
@@ -104,6 +110,11 @@ namespace E2E.UWP.Pages
             if (e.IsLookingBottom)
             {
                 CheckIsRepeat("Bottom");
+
+                if (vm.AutoCompleteText == "")
+                    return;
+
+                var lastword = await GetLastWord();
                 vm.InputText = vm.InputText.Substring(0,vm.InputText.Count() - lastword.Count());
 
                 // don't want double spacing
@@ -129,6 +140,14 @@ namespace E2E.UWP.Pages
                 repeat = 1;
 
             previousDirection = direction;
+        }
+
+        private async Task<string> GetLastWord()
+        {
+
+            var splittedSentence = await BreakWordWebService.SplitWordAsync(vm.InputText);
+            var words = splittedSentence.Split(' ');
+            return words[words.Count() - 1];
         }
     }
 }

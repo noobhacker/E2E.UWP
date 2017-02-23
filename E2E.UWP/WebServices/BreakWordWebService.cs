@@ -23,7 +23,11 @@ namespace E2E.UWP.WebServices
         public static async Task<string> SplitWordAsync(string input)
         {
             var result = await httpClient.PostAsync<BreakWordObject>(input);
-            return result.candidates[0].words;
+
+            if (result.candidates.Count() > 0)
+                return result.candidates[0].words;
+            else
+                return "";
         }
 
     }

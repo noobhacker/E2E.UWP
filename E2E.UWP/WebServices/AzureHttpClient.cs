@@ -20,10 +20,11 @@ namespace E2E.UWP.WebServices
 
             this.endpoint = endpoint;
             httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", key);
+            
         }
 
         public async Task<T> PostAsync<T>(string param = "",
-            HttpStreamContent httpContent = null,
+            IHttpContent httpContent = null,
             string contentType = "application/json")
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
@@ -32,9 +33,13 @@ namespace E2E.UWP.WebServices
             try
             {
                 var uri = new Uri(endpoint + param);
+
+                if (httpContent == null)
+                    httpContent = new HttpStringContent("");
+
                 httpContent.Headers.ContentType =
                     new Windows.Web.Http.Headers.HttpMediaTypeHeaderValue(contentType);
-
+                
                 var result = await httpClient.PostAsync(uri, httpContent);
                 result.EnsureSuccessStatusCode();
 
