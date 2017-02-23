@@ -21,7 +21,7 @@
             <GridView Grid.Row="1"
                       Name="KeyGridView"
                       ItemsSource="{Binding Selections}"
-                      SelectedIndex="{Binding SelectionIndex, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedIndex="{Binding SelectionIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                       Height="60">
                 <GridView.ItemsPanel>
                     <ItemsPanelTemplate>
