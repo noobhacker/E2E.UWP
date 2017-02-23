@@ -7,16 +7,9 @@
       mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="2*" />
-        </Grid.ColumnDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <Grid Height="200"
+              Width="200"
+              Opacity="0.5">
             <Grid>
                 <CaptureElement Name="preview"
                                 Stretch="Uniform"
@@ -32,12 +25,13 @@
                            Margin="8"
                            Foreground="Green" />
             </Grid>
-            <Button Grid.Row="1"
-                    Content="Calibrate (Look center)"
-                    HorizontalAlignment="Stretch"
-                    Name="calibrateBtn"
-                    Click="calibrateBtn_Click"/>
-            <Grid Grid.Row="2">
+
+            <Grid>
+                <Button Content="Calibrate"
+                        HorizontalAlignment="Center"
+                        Name="calibrateBtn"
+                        Click="calibrateBtn_Click" />
+
                 <Canvas Name="positionCanvas" />
                 <Rectangle StrokeThickness="1"
                            Stroke="Gray" />
@@ -79,6 +73,8 @@
                 </TextBlock>
             </Grid>
         </Grid>
-        <Frame Name="frame"  Grid.Column="1"/>
+
+        <Frame Name="frame"
+               Grid.Column="1" />
     </Grid>
 </Page>
