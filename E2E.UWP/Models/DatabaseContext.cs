@@ -14,7 +14,7 @@ namespace E2E.UWP.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=DatabaseDebug.db");
+            optionsBuilder.UseSqlite("Filename=DatabaseDebug2.db");
         }
     }
 }

@@ -9,7 +9,21 @@ namespace E2E.UWP.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "KeyFrequencies",
+                name: "MessageFrequencies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Frequency = table.Column<string>(nullable: true),
+                    Message = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MessageFrequencies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WordFrequencies",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -19,14 +33,17 @@ namespace E2E.UWP.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_KeyFrequencies", x => x.Id);
+                    table.PrimaryKey("PK_WordFrequencies", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "KeyFrequencies");
+                name: "MessageFrequencies");
+
+            migrationBuilder.DropTable(
+                name: "WordFrequencies");
         }
     }
 }
